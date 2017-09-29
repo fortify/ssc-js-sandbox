@@ -1,0 +1,44 @@
+{
+  "name": "ssc-js-sandbox",
+  "version": "1.0.0",
+  "description": "Sample code to work with SSC over REST API with JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "all": "mocha test",
+    "apiInfo": "mocha test/apiInfo_spec.js",
+    "assignUserToVersions": "mocha test/assignUserToVersions_spec.js",
+    "assignAppVersionToAuthEntities": "mocha test/assignAppVersionToAuthEntities_spec.js",
+    "createLocalUserAndAssignToVersion": "mocha test/createLocalUserAndAssignToVersion_spec.js",
+    "createVersion": "mocha test/createVersion_spec.js",
+    "generateToken": "mocha test/token_spec.js",
+    "generateReport": "mocha test/generateReport_spec.js",
+    "getVersionIssues":"mocha test/issues_spec.js",
+    "predict": "mocha test/auditAssistantBatchPredict_spec.js",
+    "train": "mocha test/auditAssistantBatchTraining_spec.js",
+    "uploadFPR": "mocha test/fprUpload_spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.hpe.com/eran-argaman/ssc-js-sandbox.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.5.0",
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "chai": "^3.5.0",
+    "chalk": "^1.1.3",
+    "console.table": "^0.8.0",
+    "cross-env": "^5.0.0",
+    "csv": "^1.1.1",
+    "dotenv": "^4.0.0",
+    "http-status": "^1.0.1",
+    "mocha": "^3.3.0",
+    "request": "^2.81.0",
+    "sequence": "^3.0.0",
+    "swagger-client": "2.1.32"
+  }
+}

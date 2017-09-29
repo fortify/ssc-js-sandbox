@@ -1,0 +1,9 @@
+node_modules
+.gradle
+npm*.log
+*.pdf
+.env
+yarn*.log
+yarn.lock
+fpr/*
+downloads/*
