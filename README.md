@@ -7,8 +7,8 @@ This project is intended as a tutorial to encourage learning the API and a quick
 
 [Documentaion](https://fortify.github.io/ssc-js-sandbox-docs)
 
+```
 License: Apache 2.0
-
 ----------------
  (c) Copyright [2017] EntIT Software LLC
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,6 @@ License: Apache 2.0
  See the License for the specific language governing permissions and
  limitations under the License.
 ---------
-
+```
 
 
