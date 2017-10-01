@@ -5,7 +5,7 @@ This project is intended as a tutorial to encourage learning the API and a quick
 
 > This API is always tested with the latest GA release of SSC, starting with 17.2
 
-[Documentaion](https://fortify.github.io/ssc-js-sandbox-docs)
+[Documentaion and setup](https://fortify.github.io/ssc-js-sandbox-docs)
 
 ```
 License: Apache 2.0
