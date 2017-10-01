@@ -1,14 +1,16 @@
 # ssc-js-sandbox
 
-A sandbox project including samples and workflows with the SSC REST API has been released. This project is intended as a tutorial to encourage learning the API and a quick way to get started.
+A sandbox project including samples and workflows with the Fortify Software Security Center (SSC) REST API. 
+This project is intended as a tutorial to encourage learning the API and a quick way to get started.
+
 > This API is always tested with the latest GA release of SSC, starting with 17.2
 
-[Documentaion](https://github.com/fortify/ssc-js-sandbox-docs)
+[Documentaion](https://fortify.github.io/ssc-js-sandbox-docs)
 
 License: Apache 2.0
 
 ----------------
- (c) Copyright [yyyy] EntIT Software LLC
+ (c) Copyright [2017] EntIT Software LLC
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at

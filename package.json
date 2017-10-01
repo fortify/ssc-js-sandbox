@@ -1,7 +1,7 @@
 {
   "name": "ssc-js-sandbox",
   "version": "1.0.0",
-  "description": "Sample code to work with SSC over REST API with JavaScript",
+  "description": "A sandbox project including samples and workflows with the Fortify Software Security Center (SSC) REST API",
   "main": "index.js",
   "scripts": {
     "all": "mocha test",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.hpe.com/eran-argaman/ssc-js-sandbox.git"
+    "url": "https://github.com/fortify/ssc-js-sandbox"
   },
   "author": "",
   "license": "ISC",

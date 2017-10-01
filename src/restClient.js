@@ -154,7 +154,7 @@ export default class restClient {
         return result;
     }
     /**
-     * send for prediciton or training or future actions when implemented
+     * send for Audit Assistant prediction or training or future actions when implemented
      * @param {*} versionId 
      * @param {*} actionType 
      */
