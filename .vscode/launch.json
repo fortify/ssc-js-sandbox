@@ -1,0 +1,231 @@
+{
+    // Use IntelliSense to learn about possible Node.js debug attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "predict",
+            "runtimeExecutable": "npm",
+            "windows": {
+                "runtimeExecutable": "npm.cmd"
+            },
+            "runtimeArgs": [
+                "run-script",
+                "test-predict"
+            ],
+            "port": 5858
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha Tests",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "${workspaceRoot}/test"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Training Tests",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${workspaceRoot}/test/auditAssistantBatchTraining_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Prediction Tests",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${workspaceRoot}/test/auditAssistantBatchPredict_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Version Tests",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${workspaceRoot}/test/createVersion_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "FPR Tests",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${workspaceRoot}/test/fprUpload_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "FPR Download Tests",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "--compilers",
+                "js:babel-core/register",
+                "-u",
+                "tdd",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceRoot}/test/fprDownload_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },        
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Generate report and Track",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${workspaceRoot}/test/generateReport_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "API Info",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${workspaceRoot}/test/apiInfo_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Generate Token",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${workspaceRoot}/test/token_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Create And Assign Local User",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "--compilers",
+                "js:babel-core/register",
+                "-u",
+                "tdd",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceRoot}/test/createLocalUserAndAssignToVersion_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Assign Local User to Versions",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "--compilers",
+                "js:babel-core/register",
+                "-u",
+                "tdd",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceRoot}/test/assignUserToVersions_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}\\index.js"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Port",
+            "address": "localhost",
+            "port": 5858
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch current opened file",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${file}"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}
