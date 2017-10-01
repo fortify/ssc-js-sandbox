@@ -22,6 +22,7 @@ import async from 'async';
 import request from 'request'
 import fs from "fs";
 import http from 'http';
+import https from 'https';
 
 const config = configLoader.loadEnv();
 
@@ -42,7 +43,11 @@ function getClientAuthTokenObj(token) {
 /** basic download file */
 function downloadFile(url, folder, filename, cb) {
     var file = fs.createWriteStream(folder + "/" + filename);
-    var request = http.get(url, function (response) {
+    let moduleRef = http;
+    if(url.startsWith("https")) {
+        moduleRef = https;
+    }
+    var request = moduleRef.get(url, function (response) {
         response.pipe(file);
         file.on('finish', function () {
             file.close(cb);

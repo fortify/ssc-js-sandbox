@@ -12,6 +12,7 @@
     "createVersion": "mocha test/createVersion_spec.js",
     "generateToken": "mocha test/token_spec.js",
     "generateReport": "mocha test/generateReport_spec.js",
+    "downloadFPR":  "mocha test/fprDownload_spec.js",
     "getVersionIssues":"mocha test/issues_spec.js",
     "predict": "mocha test/auditAssistantBatchPredict_spec.js",
     "train": "mocha test/auditAssistantBatchTraining_spec.js",

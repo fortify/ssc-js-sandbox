@@ -17,6 +17,8 @@ const CommonTestUtils = require('../src/commonTestsUtils');
 const commonTestsUtils = new CommonTestUtils();
 import RestClient from '../src/restClient';
 const restClient = new RestClient();
+import configLoader from '../config';
+const config = configLoader.loadEnv();
 
 /**
  * testing usage of the SSC REST API for generaeting, tracking and downloading a report
@@ -45,7 +47,7 @@ describe('generate a report and tracks status to completion', function () {
    */
   it('generates a report ', function (done) {
 
-    restClient.generateDISASTIGReport("MY_DISA_STIG", "My excellent notes", "DISA STIG", "PDF", 1, 3).then((savedReport) => {
+    restClient.generateDISASTIGReport("MY_DISA_STIG", "My excellent notes", "DISA STIG", "PDF", config.sampleAppId, config.sampleVersionId).then((savedReport) => {
       console.log(chalk.green("successfully generated DISA STIG " + JSON.stringify(savedReport)));
       savedReportEntity = savedReport;
       done();

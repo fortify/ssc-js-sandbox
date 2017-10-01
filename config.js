@@ -14,6 +14,7 @@ const config = {
     versionIdCSV: "aa-version-sample.csv", //filename with comma seperated application version ids
     batchSize: 2, //rest call parrallel batch size - how many version to call in parallel in one batch (batches executed sequentually)
     sampleFPR: '/fpr/Log1.3_splc.fpr',
+    sampleAppId: 1,
     sampleVersionId: 2,//sample app version id
     sampleSecondaryVersionId: 4,
     sampleArtifactId: 10, // sample fpr id
