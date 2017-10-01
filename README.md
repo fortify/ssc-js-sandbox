@@ -1,4 +1,4 @@
-# ssc-js-sandbox
+# Fortify Software Security Center JavaScript Sandbox
 
 A sandbox project including samples and workflows with the Fortify Software Security Center (SSC) REST API. 
 This project is intended as a tutorial to encourage learning the API and a quick way to get started.
