@@ -3,9 +3,9 @@
 A sandbox project including samples and workflows with the Fortify Software Security Center (SSC) REST API. 
 This project is intended as a tutorial to encourage learning the API and a quick way to get started.
 
-> This API is always tested with the latest GA release of SSC, starting with 17.2
+> This API is always tested with the latest GA release of SSC, starting with 17.2.
 
-[Documentaion and setup](https://fortify.github.io/ssc-js-sandbox-docs)
+[Documentation and setup](https://fortify.github.io/ssc-js-sandbox-docs)
 
 ```
 License: Apache 2.0
