@@ -36,8 +36,11 @@ describe('creates an Application version (a.k.a Project version)', function () {
     }).catch((err) => { done(err) });
   });
 
-  after(function () {
-
+  after(function (done) {
+    /* Perform any cleanups. currently clears all tokens of test user.
+     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+     */
+    commonTestsUtils.doCleanup(done, restClient);
   });
   
   /**

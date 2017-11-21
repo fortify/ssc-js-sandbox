@@ -38,8 +38,11 @@ describe('api info', function () {
     });
   });
 
-  after(function () {
-
+  after(function (done) {
+    /* Perform any cleanups. 
+     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+     */
+    commonTestsUtils.doCleanup(done, restClient);
   });
 
   /**

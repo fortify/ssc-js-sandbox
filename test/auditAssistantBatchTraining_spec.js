@@ -16,7 +16,6 @@ const CommonTestUtils =  require('../src/commonTestsUtils');
 
 const commonTestsUtils = new CommonTestUtils();
 
-
 describe('batch predicts audit assistant', function () {
 
   before(function () {
@@ -26,8 +25,11 @@ describe('batch predicts audit assistant', function () {
     }
   });
 
-  after(function () {
-
+  after(function (done) {
+     /* Perform any cleanups. currently clears all tokens of test user.
+     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+     */
+    commonTestsUtils.doCleanup(done);
   });
 
   it('validates all properties exist', function (done) {

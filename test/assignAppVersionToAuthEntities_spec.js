@@ -36,8 +36,11 @@ describe('assign authenticated entities (users and ldap entities) to an  appvers
     }).catch((err) => { done(err) });
   });
 
-  after(function () {
-
+  after(function (done) {
+    /* Perform any cleanups. currently clears all tokens of test user.
+     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+     */
+    commonTestsUtils.doCleanup(done, restClient);
   });
   
   const pvId = config.sampleSecondaryVersionId;

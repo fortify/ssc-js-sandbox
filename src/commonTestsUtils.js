@@ -54,6 +54,22 @@ class CommonTestUtils {
         });
     }
     
+    /* Perform any cleanups. currently clears all tokens of test user.
+     * Do not call this method if you plan on re-using a long-lived token for your authentication.
+     */
+    doCleanup(done, myRestClient) {
+        // assumes initialized restClient
+        let client; 
+        if (!myRestClient) {
+            myRestClient = restClient;
+        }
+        myRestClient.clearTokensOfUser().then(() => {
+            done()
+        }).catch((err) => { 
+            done(err) 
+        });
+    }
+
     /**
      * does a batch submission of API calls in chunks.
      * Follows this algorithm:
