@@ -101,7 +101,7 @@ export default class restClient {
                 async.waterfall([
                     function getToken(callback) {
                         /* do not create token again if we already have one. 
-                         * In general, for automations either use a short-lived (1day) token such as "UnifiedLoginToken"
+                         * In general, for automations either use a short-lived (<1day) token such as "UnifiedLoginToken"
                          * or preferably, use a long-lived token such as "AnalysisUploadToken"/"JenkinsToken" (lifetime is several months)
                          * and retrieve it from persistent storage. DO NOT create new long-lived tokens for every run!!  */
                         if (global.myToken) { 
