@@ -44,8 +44,8 @@ describe('generate tokens by type', function () {
    * create a version
    */
   it('generates a token ', function (done) {
-    //generate a unifiedLoginToken by default or look in env for override
-    let type = 'UnifiedLoginToken';
+    //generate a CloudOneTimeJobToken by default or look in env for override
+    let type = 'CloudOneTimeJobToken';
     //AnalysisDownloadToken, AnalysisUploadToken, AuditToken, UploadFileTransferToken, DownloadFileTransferToken, ReportFileTransferToken, CloudCtrlToken,
     //CloudOneTimeJobToken, WIESystemToken, WIEUserToken, UnifiedLoginToken, ReportToken, PurgeProjectVersionToken
     if (process.env.FORTIFY_TOKEN_TYPE) {
