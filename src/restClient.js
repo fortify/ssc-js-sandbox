@@ -100,12 +100,22 @@ export default class restClient {
                 that.api = api;
                 async.waterfall([
                     function getToken(callback) {
-                        restClient.generateToken("UnifiedLoginToken")
-                            .then((token) => {
-                                callback(null, token);
-                            }).catch((error) => {
-                                callback(error);
-                            });
+                        /* do not create token again if we already have one. 
+                         * In general, for automations either use a short-lived (1day) token such as "UnifiedLoginToken"
+                         * or preferably, use a long-lived token such as "AnalysisUploadToken"/"JenkinsToken" (lifetime is several months)
+                         * and retrieve it from persistent storage. DO NOT create new long-lived tokens for every run!!  */
+                        if (global.myToken) { 
+                            console.log("Already have login token, skipping login token creation...");   
+                            callback(null, global.myToken);
+                        } else {
+                            console.log("Creating new login token");
+                            restClient.generateToken("UnifiedLoginToken")
+                                .then((token) => {
+                                    callback(null, token);
+                                }).catch((error) => {
+                                    callback(error);
+                                });
+                        }
                     },
                     function heartbeat(token, callback) {
                         api["feature-controller"].listFeature({}, getClientAuthTokenObj(token)).then((features) => {
@@ -119,6 +129,7 @@ export default class restClient {
                         reject(err);
                     } else {
                         that.token = token; //save token
+                        global.myToken = token; 
                         resolve("success");
                     }
                 });
@@ -483,6 +494,29 @@ export default class restClient {
             });
         });
 
+    }
+    /* 
+    * clears all tokens belonging to test user
+    * (In the 17.20 release, clearing an individual token by value is not supported by the "auth-token-controller" endpoint.
+    * To delete individual tokens, the 'fortifyclient' tool can be used.) 
+    */
+    clearTokensOfUser() {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            const auth = 'Basic ' + new Buffer(config.user + ':' + config.password).toString('base64');
+
+            restClient.api["auth-token-controller"].multiDeleteAuthToken({all:true}, {
+                responseContentType: 'application/json',
+                clientAuthorizations: {
+                    "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
+                }
+            }).then((data) => {
+                //got it so pass along
+                resolve(data.obj.data); // will be 'true' but we don't really care about return value.
+            }).catch((error) => {
+                reject(error);
+            });
+        });
     }
     /**
      * uploads a single FPR to a version based on ID
