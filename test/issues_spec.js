@@ -39,8 +39,11 @@ describe('Explore issue-of-project-version-controller', function () {
     }).catch((err) => { done(err) });
   });
 
-  after(function () {
-
+  after(function (done) {
+    /* Perform any cleanups. currently clears all tokens of test user.
+     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+     */
+    commonTestsUtils.doCleanup(done, restClient);
   });
 
   it('get all issues with batching', function (done) {

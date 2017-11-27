@@ -36,16 +36,19 @@ describe('generate tokens by type', function () {
     }).catch((err) => { done(err) });
   });
 
-  after(function () {
-
+  after(function (done) {
+    /* Perform any cleanups. currently clears all tokens of test user.
+     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+     */
+    commonTestsUtils.doCleanup(done, restClient);
   });
 
   /**
    * create a version
    */
   it('generates a token ', function (done) {
-    //generate a unifiedLoginToken by default or look in env for override
-    let type = 'UnifiedLoginToken';
+    //generate a CloudOneTimeJobToken by default or look in env for override
+    let type = 'CloudOneTimeJobToken';
     //AnalysisDownloadToken, AnalysisUploadToken, AuditToken, UploadFileTransferToken, DownloadFileTransferToken, ReportFileTransferToken, CloudCtrlToken,
     //CloudOneTimeJobToken, WIESystemToken, WIEUserToken, UnifiedLoginToken, ReportToken, PurgeProjectVersionToken
     if (process.env.FORTIFY_TOKEN_TYPE) {

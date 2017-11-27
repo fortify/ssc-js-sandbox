@@ -16,6 +16,8 @@ const chalk = require('chalk');
 import configLoader from '../config';
 import RestClient from '../src/restClient';
 const restClient = new RestClient();
+const CommonTestUtils = require('../src/commonTestsUtils');
+const commonTestsUtils = new CommonTestUtils();
 const config = configLoader.loadEnv();
 
 
@@ -37,9 +39,13 @@ describe('downloads an FPR and tracks processsing to completion', function () {
     }).catch((err) => { done(err) });
   });
 
-  after(function () {
-
+  after(function (done) {
+    /* Perform any cleanups. currently clears all tokens of test user.
+     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+     */
+    commonTestsUtils.doCleanup(done, restClient);
   });
+
   let artifactJobid, jobEntity = undefined;
   /**
    * downloads an FPR

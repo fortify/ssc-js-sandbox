@@ -1,5 +1,5 @@
 /**
- * (c) Copyright [2017] EntIT Software LLC
+ * (c) Copyright [yyyy] EntIT Software LLC
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
 *  You may obtain a copy of the License at
@@ -13,15 +13,16 @@
 const assert = require('assert');
 const expect = require('chai').expect;
 const chalk = require('chalk')
-const CommonTestUtils = require('../src/commonTestsUtils');
+const CommonTestUtils = require('../../src/commonTestsUtils');
 const commonTestsUtils = new CommonTestUtils();
-import RestClient from '../src/restClient';
+import RestClient from '../../src/restClient';
 const restClient = new RestClient();
 
 /**
- * get information about API
+ * perform any global cleanups after the test sequence. 
+ * If you run any tests individually, you may also want to run this test manually to cleanup. 
  */
-describe('api info', function () {
+describe('run last and clean up after the full sequence of tests', function () {
 
   before(function (done) {
     //override NodeJS security for SSC (unprotected)
@@ -33,38 +34,24 @@ describe('api info', function () {
      */
     restClient.initialize().then(() => {
       done()
-    }).catch((err) => { 
-      done(err) 
-    });
+    }).catch((err) => { done(err) });
   });
 
-  after(function (done) {
-    /* Perform any cleanups. 
-     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
-     */
-    commonTestsUtils.doCleanup(done, restClient);
+  after(function () {
+
   });
 
   /**
-   * print a list of controllers.
+   * clear tokens
    */
-  it('lists api endpoints and all their methods ', function (done) {
-    const controllers = restClient.getControllers();
-    controllers.sort((a,b)=>{
-      if(a.name.toLowerCase() > b.name.toLowerCase()) {
-        return -1;
-      } 
-      if(a.name.toLowerCase() < b.name.toLowerCase()) {
-        return 1;
-      } 
-      return 0;
+  it('clears all tokens owned by the test user', function (done) {
+    
+    restClient.clearTokensOfUser().then((status) => {
+      console.log(chalk.green("successfully cleared all tokens owned by test user "));
+      done();
+    }).catch((err) => {
+      console.log(chalk.red("error clearing tokens owned by test user"), err)
+      done(err);
     });
-    const csv = controllers.map((item)=>{
-      return `${item.name}, ${item.apis.join(',')} `
-    });
-    console.log(`Total: ${controllers.length}`);
-    console.log(csv.join("\n"));
-    done();
   });
-   
 });
