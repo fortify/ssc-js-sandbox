@@ -38,9 +38,13 @@ describe('generate a report and tracks status to completion', function () {
     }).catch((err) => { done(err) });
   });
 
-  after(function () {
-
+  after(function (done) {
+    /* Perform any cleanups. currently clears all tokens of test user.
+     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+     */
+    commonTestsUtils.doCleanup(done, restClient);
   });
+
   let savedReportEntity = undefined;
   /**
    * generate report

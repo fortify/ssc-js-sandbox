@@ -4,7 +4,7 @@
   "description": "A sandbox project including samples and workflows with the Fortify Software Security Center (SSC) REST API",
   "main": "index.js",
   "scripts": {
-    "all": "mocha test",
+    "all": "mocha test/*.js test/cleanup/runCleanup_spec.js",
     "apiInfo": "mocha test/apiInfo_spec.js",
     "assignUserToVersions": "mocha test/assignUserToVersions_spec.js",
     "assignAppVersionToAuthEntities": "mocha test/assignAppVersionToAuthEntities_spec.js",
@@ -16,7 +16,8 @@
     "getVersionIssues":"mocha test/issues_spec.js",
     "predict": "mocha test/auditAssistantBatchPredict_spec.js",
     "train": "mocha test/auditAssistantBatchTraining_spec.js",
-    "uploadFPR": "mocha test/fprUpload_spec.js"
+    "uploadFPR": "mocha test/fprUpload_spec.js",
+    "runCleanup": "mocha test/cleanup/runCleanup_spec.js"
   },
   "repository": {
     "type": "git",

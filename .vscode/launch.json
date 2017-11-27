@@ -24,7 +24,7 @@
             "name": "Mocha Tests",
             "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
             "args": [
-                "${workspaceRoot}/test"
+                "${workspaceRoot}/test/*.js", "${workspaceRoot}/test/cleanup/*.js"
             ],
             "internalConsoleOptions": "openOnSessionStart"
         },
@@ -199,6 +199,21 @@
             ],
             "internalConsoleOptions": "openOnSessionStart"
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Cleanup User Tokens (post-testing)",
+            "env": {
+                "DEBUG": "true"
+            },
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node.cmd",
+            "sourceMaps": true,
+            "args": [
+                "${workspaceRoot}/test/cleanup/runCleanup_spec.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },        
         {
             "type": "node",
             "request": "launch",
