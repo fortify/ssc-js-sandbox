@@ -500,6 +500,7 @@ export default class restClient {
         const restClient = this;
         return new Promise((resolve, reject) => {
             const auth = 'Basic ' + new Buffer(config.user + ':' + config.password).toString('base64');
+
             if (!restClient.api) { // api was never initialized (eg. problem connecting to server) 
                 return reject(new Error("restClient not initialized! make sure to call initialize before using API"));
             }
