@@ -501,17 +501,20 @@ export default class restClient {
         return new Promise((resolve, reject) => {
             const auth = 'Basic ' + new Buffer(config.user + ':' + config.password).toString('base64');
 
+            if (!restClient.api) { // api was never initialized (eg. problem connecting to server) 
+                return reject(new Error("restClient not initialized! make sure to call initialize before using API"));
+            }
             restClient.api["auth-token-controller"].multiDeleteAuthToken({all:true}, {
                 responseContentType: 'application/json',
                 clientAuthorizations: {
-                    "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
+                   "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
                 }
             }).then((data) => {
                 //got it so pass along
                 resolve(data.obj.data); // will be 'true' but we don't really care about return value.
             }).catch((error) => {
                 reject(error);
-            });
+            });            
         });
     }
     /**
