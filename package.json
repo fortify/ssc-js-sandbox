@@ -7,6 +7,7 @@
     "all": "mocha test/*.js test/cleanup/runCleanup_spec.js",
     "apiInfo": "mocha test/apiInfo_spec.js",
     "assignUserToVersions": "mocha test/assignUserToVersions_spec.js",
+    "assignAttributeValueToVersions": "mocha test/assignAttributeVersions_spec.js",
     "assignAppVersionToAuthEntities": "mocha test/assignAppVersionToAuthEntities_spec.js",
     "createLocalUserAndAssignToVersion": "mocha test/createLocalUserAndAssignToVersion_spec.js",
     "createVersion": "mocha test/createVersion_spec.js",
