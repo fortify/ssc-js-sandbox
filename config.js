@@ -21,7 +21,8 @@ const config = {
     downloadFolder: "/downloads", //relative to root project, wil be created if non existant
     sampleUserId: 4, 
     sampleAuthEntities: [{"id": 12, "isLdap": false}, {"id": 9, "isLdap": false}, {"id": 6, "isLdap": false}],
-    sampleAttributeValue: [{"attributeDefinitionId":29,"values":null,"value":"123"}]
+    sampleAttributeDefinition: { "name": undefined, "category": "TECHNICAL", "appEntityType": "ALL", "type": "TEXT" },
+    sampleAttributeValue: [{"attributeDefinitionId":undefined,"values":null,"value":undefined}]
 }
 module.exports = {
     /**

@@ -299,6 +299,28 @@ export default class restClient {
         });
     }
 
+
+    /**
+     * create attribute definition
+     * @param {*} definition - attribute definition json payload (see config.js)
+     */
+    createAttributeDefinition(definition) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["attribute-definition-controller"].createAttributeDefinition({
+                resource: definition
+            }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                console.log("attribute " + resp.id + " created successfully!");
+                resolve(resp.obj.data); //return attribute definition object
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
     /**
      * Assign an attribute to a version with value
      * @param {*} versionId 

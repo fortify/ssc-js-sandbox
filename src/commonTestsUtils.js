@@ -27,7 +27,7 @@ const config = configLoader.loadEnv();
  */
 class CommonTestUtils {
     constructor() {
-
+        this.restClient = restClient;//make public for test usage.
     }
 
 

@@ -23,7 +23,7 @@ const config = configLoader.loadEnv();
 /**
  * testing usage of the SSC REST API for assiging an attribute to an application version
  */
-describe('Assigns a value for an attribute  to a list of versions from csv', function () {
+describe('Creates a new Attribute of type text and assigns a value this attribute to a list of versions from csv', function () {
 
   before(function () {
     //override NodeJS security for SSC (unprotected)
@@ -43,7 +43,32 @@ describe('Assigns a value for an attribute  to a list of versions from csv', fun
     commonTestsUtils.validateConfigurationAndAuth(done);
   });
 
-  it('batch predicts on given list of versions ', function (done) {
+  let attributeDefinition;
+
+  /**
+   * create a version
+   */
+  it('creates a single input (text) attribute', function (done) {
+    let sampleAttributeDefinition = config.sampleAttributeDefinition;
+    sampleAttributeDefinition.name = "company guid " + Math.floor(Math.random()*100);
+    commonTestsUtils.restClient.createAttributeDefinition(sampleAttributeDefinition).then((attrDef) => {
+      console.log(chalk.green("successfully created attribute definition " + attrDef.name + " /id = " + attrDef.id));
+      attributeDefinition = attrDef;
+      done();
+    }).catch((err) => {
+      console.log(chalk.red("error creating attribute definition "), err)
+      done(err);
+    });
+  });
+
+  it('batch assigns a value to an attribute on multiple versions', function (done) {
+    if(!attributeDefinition) {
+      done(new Error("attributeDefinition was not created in previous step"));
+      return;
+    }
+    
+    config.sampleAttributeValue[0].attributeDefinitionId = attributeDefinition.id;
+    config.sampleAttributeValue[0].value = "#sandbox_sample_guid";
     commonTestsUtils.batchAPIActions(done, "assignAttribute", config.sampleAttributeValue);
   });
 
