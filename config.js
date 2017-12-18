@@ -20,7 +20,9 @@ const config = {
     sampleArtifactId: 10, // sample fpr id
     downloadFolder: "/downloads", //relative to root project, wil be created if non existant
     sampleUserId: 4, 
-    sampleAuthEntities: [{"id": 12, "isLdap": false}, {"id": 9, "isLdap": false}, {"id": 6, "isLdap": false}]
+    sampleAuthEntities: [{"id": 12, "isLdap": false}, {"id": 9, "isLdap": false}, {"id": 6, "isLdap": false}],
+    sampleAttributeDefinition: { "name": undefined, "category": "TECHNICAL", "appEntityType": "ALL", "type": "TEXT" },
+    sampleAttributeValue: [{"attributeDefinitionId":undefined,"values":null,"value":undefined}]
 }
 module.exports = {
     /**

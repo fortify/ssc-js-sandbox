@@ -27,7 +27,7 @@ const config = configLoader.loadEnv();
  */
 class CommonTestUtils {
     constructor() {
-
+        this.restClient = restClient;//make public for test usage.
     }
 
 
@@ -79,8 +79,9 @@ class CommonTestUtils {
      * print a summary about all success and and all failures 
      * @param {*} done - callback for completion
      * @param {*} restActionFunctionName  - name of funciton to be called on restClient. i.e restClient.sendForTraining
+     * @param {*} payload - if a POST or PUT this is the payload sent otherwise undefined.
      */
-    batchAPIActions(done, restActionFunctionName) {
+    batchAPIActions(done, restActionFunctionName, payload) {
         const data = fs.readFileSync(config.versionIdCSV, 'utf8');
         let promises = [];
         const sequence = Sequence.create();
@@ -98,9 +99,10 @@ class CommonTestUtils {
                     const p = new Promise((resolve, reject) => {
                         //make call to SSC to send for training.
                         if (restClient[restActionFunctionName] && typeof restClient[restActionFunctionName] === 'function') {
-                            restClient[restActionFunctionName](versionId).then((data) => {
+                            restClient[restActionFunctionName](versionId, payload).then((data) => {
                                 resolve({ data: data, err: undefined, version: versionId });
                             }).catch((err) => {
+                                console.error(err);
                                 resolve({ data: undefined, err: err, version: versionId });
                             })
                         } else {
