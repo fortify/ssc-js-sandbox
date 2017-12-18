@@ -44,7 +44,7 @@ function getClientAuthTokenObj(token) {
 function downloadFile(url, folder, filename, cb) {
     var file = fs.createWriteStream(folder + "/" + filename);
     let moduleRef = http;
-    if(url.startsWith("https")) {
+    if (url.startsWith("https")) {
         moduleRef = https;
     }
     var request = moduleRef.get(url, function (response) {
@@ -104,14 +104,14 @@ export default class restClient {
                          * In general, for automations either use a short-lived (<1day) token such as "UnifiedLoginToken"
                          * or preferably, use a long-lived token such as "AnalysisUploadToken"/"JenkinsToken" (lifetime is several months)
                          * and retrieve it from persistent storage. DO NOT create new long-lived tokens for every run!!  */
-                        
+
                         //console.log("Creating new login token");
                         restClient.generateToken("UnifiedLoginToken")
                             .then((token) => {
-                               callback(null, token);
+                                callback(null, token);
                             }).catch((error) => {
                                 callback(error);
-                            });                        
+                            });
                     },
                     function heartbeat(token, callback) {
                         api["feature-controller"].listFeature({}, getClientAuthTokenObj(token)).then((features) => {
@@ -298,6 +298,52 @@ export default class restClient {
             });
         });
     }
+
+
+    /**
+     * create attribute definition
+     * @param {*} definition - attribute definition json payload (see config.js)
+     */
+    createAttributeDefinition(definition) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["attribute-definition-controller"].createAttributeDefinition({
+                resource: definition
+            }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                console.log("attribute " + resp.id + " created successfully!");
+                resolve(resp.obj.data); //return attribute definition object
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+    /**
+     * Assign an attribute to a version with value
+     * @param {*} versionId 
+     * @param {*} attributes 
+     */
+    assignAttribute(versionId, attributes) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["attribute-of-project-version-controller"].updateCollectionAttributeOfProjectVersion({
+                parentId: versionId,
+                data: attributes
+            }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                console.log("versionid " + versionId + " updated successfully!");
+                resolve(versionId);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
     /**
      * Generates a DISA STIG report
      * @param {*} name - report name to be saved under
@@ -504,17 +550,17 @@ export default class restClient {
             if (!restClient.api) { // api was never initialized (eg. problem connecting to server) 
                 return reject(new Error("restClient not initialized! make sure to call initialize before using API"));
             }
-            restClient.api["auth-token-controller"].multiDeleteAuthToken({all:true}, {
+            restClient.api["auth-token-controller"].multiDeleteAuthToken({ all: true }, {
                 responseContentType: 'application/json',
                 clientAuthorizations: {
-                   "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
+                    "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
                 }
             }).then((data) => {
                 //got it so pass along
                 resolve(data.obj.data); // will be 'true' but we don't really care about return value.
             }).catch((error) => {
                 reject(error);
-            });            
+            });
         });
     }
     /**
@@ -603,7 +649,7 @@ export default class restClient {
                 /**
                  * use a simple file download pipe from response to save to downloads folder
                  */
-                function downloadFPR(token, callback) {                    
+                function downloadFPR(token, callback) {
                     const url = config.sscFprDownloadURL + "?mat=" + token + "&id=" + artifactId;
                     try {
                         let destFolder = __dirname + "/.." + config.downloadFolder;
@@ -612,7 +658,7 @@ export default class restClient {
                             if (err) {
                                 callback(err);
                             } else callback(null, destFolder + "/" + filename);
-                        });                        
+                        });
                     } catch (e) {
                         callback(e);
                     }
@@ -625,7 +671,7 @@ export default class restClient {
                 resolve(dest);
             });
         });
-    }                                
+    }
 
 
     /**
