@@ -23,7 +23,7 @@ const restClient = new RestClient();
  */
 describe('generate tokens by type', function () {
 
-  before(function (done) {
+  before(async () => {
     //override NodeJS security for SSC (unprotected)
     if (process.env.DisableSSLSecurity) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -31,9 +31,8 @@ describe('generate tokens by type', function () {
     /**
      * initialize and authenticate
      */
-    restClient.initialize().then(() => {
-      done()
-    }).catch((err) => { done(err) });
+    await restClient.initialize();
+
   });
 
   after(function (done) {
@@ -46,7 +45,7 @@ describe('generate tokens by type', function () {
   /**
    * create a version
    */
-  it('generates a token ', function (done) {
+  it('generates a token ', async () => {
     //generate a CloudOneTimeJobToken by default or look in env for override
     let type = 'CloudOneTimeJobToken';
     //AnalysisDownloadToken, AnalysisUploadToken, AuditToken, UploadFileTransferToken, DownloadFileTransferToken, ReportFileTransferToken, CloudCtrlToken,
@@ -54,12 +53,12 @@ describe('generate tokens by type', function () {
     if (process.env.FORTIFY_TOKEN_TYPE) {
       type = process.env.FORTIFY_TOKEN_TYPE;
     }
-    restClient.generateToken(type).then((token) => {
+    try {
+      let token = await restClient.generateToken(type);
       console.log(chalk.green("successfully generated " + type + " token " + token));
-      done();
-    }).catch((err) => {
+    } catch (err) {
       console.log(chalk.red("error creating token"), err)
-      done(err);
-    });
+      throw err;
+    };
   });
 });

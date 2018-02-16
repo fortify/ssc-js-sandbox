@@ -1,5 +1,9 @@
 {
   "name": "ssc-js-sandbox",
+  "engines": {
+    "node": ">=8.00"
+  },
+  "engineStrict": true,
   "version": "1.0.0",
   "description": "A sandbox project including samples and workflows with the Fortify Software Security Center (SSC) REST API",
   "main": "index.js",
@@ -13,8 +17,8 @@
     "createVersion": "mocha test/createVersion_spec.js",
     "generateToken": "mocha test/token_spec.js",
     "generateReport": "mocha test/generateReport_spec.js",
-    "downloadFPR":  "mocha test/fprDownload_spec.js",
-    "getVersionIssues":"mocha test/issues_spec.js",
+    "downloadFPR": "mocha test/fprDownload_spec.js",
+    "getVersionIssues": "mocha test/issues_spec.js",
     "predict": "mocha test/auditAssistantBatchPredict_spec.js",
     "train": "mocha test/auditAssistantBatchTraining_spec.js",
     "uploadFPR": "mocha test/fprUpload_spec.js",
@@ -29,7 +33,7 @@
   "dependencies": {
     "async": "^2.5.0",
     "babel-cli": "^6.24.1",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^3.5.0",

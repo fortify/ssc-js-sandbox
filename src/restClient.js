@@ -88,51 +88,27 @@ export default class restClient {
     /**
      * will authenticate based on config.js (root) parameters adn the attempt to make a call to features API to test for hearbeat.
      */
-    initialize() {
+    async initialize() {
         const restClient = this;
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const that = this;
-            new Swagger({
+            let swaggerPromise = new Swagger({
                 url: `${config.sscAPIBase}/spec.json`,
                 usePromise: true,
-            }).then((api) => {
-                console.log("successfully loaded swagger spec. Attempting to call heartbeat /features ");
-                that.api = api;
-                async.waterfall([
-                    function getToken(callback) {
-                        /* do not create token again if we already have one. 
-                         * In general, for automations either use a short-lived (<1day) token such as "UnifiedLoginToken"
-                         * or preferably, use a long-lived token such as "AnalysisUploadToken"/"JenkinsToken" (lifetime is several months)
-                         * and retrieve it from persistent storage. DO NOT create new long-lived tokens for every run!!  */
-
-                        //console.log("Creating new login token");
-                        restClient.generateToken("UnifiedLoginToken")
-                            .then((token) => {
-                                callback(null, token);
-                            }).catch((error) => {
-                                callback(error);
-                            });
-                    },
-                    function heartbeat(token, callback) {
-                        api["feature-controller"].listFeature({}, getClientAuthTokenObj(token)).then((features) => {
-                            callback(null, token);
-                        }).catch((error) => {
-                            callback(error);
-                        });
-                    }
-                ], function onDoneHandler(err, token) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        that.token = token; //save token                    
-                        resolve("success");
-                    }
-                });
-
-            }).catch((err) => {
-                reject(err);
             });
-
+            try {
+                let api = await swaggerPromise;
+                that.api = api;
+                let token = await restClient.generateToken("UnifiedLoginToken");
+                //get features as a heartbeat test for token
+                let featuresAsyncPromise = api["feature-controller"].listFeature({}, getClientAuthTokenObj(token));
+                await featuresAsyncPromise;
+                //if we are here and no error happend we can save token
+                that.token = token; //save token                    
+                resolve("success");
+            } catch (e) {
+                reject(e);
+            }
         })
     }
     /**
@@ -517,24 +493,22 @@ export default class restClient {
      * NOTE: these can be modiefied and there could be custom tokens created by customers inside SSC. 
      * To see the complete list look in the serviceContex.xml file in the SSC web app deployment.
      */
-    generateToken(type) {
+    async generateToken(type) {
         const restClient = this;
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const auth = 'Basic ' + new Buffer(config.user + ':' + config.password).toString('base64');
-
-            restClient.api["auth-token-controller"].createAuthToken({ authToken: { "terminalDate": getExpirationDateString(), "type": type } }, {
-                responseContentType: 'application/json',
-                clientAuthorizations: {
-                    "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
-                }
-            }).then((data) => {
-                //got it so pass along
+            try {
+                let data = await restClient.api["auth-token-controller"].createAuthToken({ authToken: { "terminalDate": getExpirationDateString(), "type": type } }, {
+                    responseContentType: 'application/json',
+                    clientAuthorizations: {
+                        "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
+                    }
+                });
                 resolve(data.obj.data.token)
-            }).catch((error) => {
+            } catch (e) {
                 reject(error);
-            });
+            }
         });
-
     }
     /* 
     * clears all tokens belonging to test user
