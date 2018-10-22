@@ -60,7 +60,7 @@ function downloadFile(url, folder, filename, cb) {
 
 /**
  * create this directory if does not exist
- * @param {*} dir 
+ * @param {*} dir
  */
 function createDirectoryIfNoExist(dir) {
     if (!fs.existsSync(dir)) {
@@ -74,7 +74,7 @@ function createDirectoryIfNoExist(dir) {
  */
 function getExpirationDateString() {
     const dt = new Date();
-    dt.setDate(dt.getDate() + 0.5);
+    dt.setDate(dt.getDate() + 1);
     return dt.toISOString();
 }
 
@@ -100,7 +100,7 @@ export default class restClient {
                 that.api = api;
                 async.waterfall([
                     function getToken(callback) {
-                        /* do not create token again if we already have one. 
+                        /* do not create token again if we already have one.
                          * In general, for automations either use a short-lived (<1day) token such as "UnifiedLoginToken"
                          * or preferably, use a long-lived token such as "AnalysisUploadToken"/"JenkinsToken" (lifetime is several months)
                          * and retrieve it from persistent storage. DO NOT create new long-lived tokens for every run!!  */
@@ -124,7 +124,7 @@ export default class restClient {
                     if (err) {
                         reject(err);
                     } else {
-                        that.token = token; //save token                    
+                        that.token = token; //save token
                         resolve("success");
                     }
                 });
@@ -166,8 +166,8 @@ export default class restClient {
     }
     /**
      * send for Audit Assistant prediction or training or future actions when implemented
-     * @param {*} versionId 
-     * @param {*} actionType 
+     * @param {*} versionId
+     * @param {*} actionType
      */
     sendToAA(versionId, actionType) {
         const restClient = this;
@@ -196,22 +196,22 @@ export default class restClient {
         return this.sendToAA(versionId, "SEND_TO_AUDITASSISTANT");
     }
     /**
-     * create a version. At the minimum this requires 3 steps 
+     * create a version. At the minimum this requires 3 steps
      * 1. create version and app (project) resource
      * 2. assign attributes (required ones at least)
      * 3. commit version to make it usable
      * Note: a bulk request can be used to send one request to the server that contains more than one.
      * This sample will use an async waterfall call to do them one after the other.
-     * @param {*} options { name, 
-     *                      description, 
-     *                      appName, 
-     *                      appDesc, 
-     *                      issueTemplateId, 
-     *                       
+     * @param {*} options { name,
+     *                      description,
+     *                      appName,
+     *                      appDesc,
+     *                      issueTemplateId,
+     *
      *                      // if passed, issues from config.samppleVersionId  will be copied to newly
      *                      // created version (background job will be started on server)
      *                      copyCurrentState (true/false)
-     * 
+     *
      *                      //attributes can be multi options - use values
      *                      //single select such as boolean use value.
      *                      attributes: [
@@ -323,8 +323,8 @@ export default class restClient {
 
     /**
      * Assign an attribute to a version with value
-     * @param {*} versionId 
-     * @param {*} attributes 
+     * @param {*} versionId
+     * @param {*} attributes
      */
     assignAttribute(versionId, attributes) {
         const restClient = this;
@@ -376,7 +376,7 @@ export default class restClient {
                         });
                 },
                 /**
-                 * generate the report by composing the resource object that includes values for all parameters defined in the 
+                 * generate the report by composing the resource object that includes values for all parameters defined in the
                  * definition file retrieved in the previous call
                  */
                 function generateReport(definition, callback) {
@@ -429,7 +429,7 @@ export default class restClient {
     }
     /**
      * gets the saved report entity that includes status for gived saved report id
-     * @param {*} id 
+     * @param {*} id
      */
     getSavedReportEntity(id) {
         const restClient = this;
@@ -446,7 +446,7 @@ export default class restClient {
     }
     /**
      * get job entity with status
-     * @param {*} name - job name 
+     * @param {*} name - job name
      */
     getJob(name) {
         const restClient = this;
@@ -463,7 +463,7 @@ export default class restClient {
     }
     /**
      * download a report file from SSC
-     * @param {*} reportId 
+     * @param {*} reportId
      * @param {*} filename //filename to save it under. will get saved to [project root]/[config.downloadFolder]
      */
     downloadReport(reportId, filename) {
@@ -514,7 +514,7 @@ export default class restClient {
      * @param {*} type - type of token
      * possible values: AnalysisDownloadToken, AnalysisUploadToken, AuditToken, UploadFileTransferToken, DownloadFileTransferToken, ReportFileTransferToken, CloudCtrlToken,
      * CloudOneTimeJobToken, WIESystemToken, WIEUserToken, UnifiedLoginToken, ReportToken, PurgeProjectVersionToken
-     * NOTE: these can be modiefied and there could be custom tokens created by customers inside SSC. 
+     * NOTE: these can be modiefied and there could be custom tokens created by customers inside SSC.
      * To see the complete list look in the serviceContex.xml file in the SSC web app deployment.
      */
     generateToken(type) {
@@ -536,18 +536,18 @@ export default class restClient {
         });
 
     }
-    /* 
+    /*
     * clears all tokens belonging to test user
     * **Do not use this method if you are using a long-lived token for your authentication!**
     * (In the 17.20 release, clearing an individual token by value is not supported by the "auth-token-controller" endpoint.
-    * To delete individual tokens, the 'fortifyclient' tool can be used.) 
+    * To delete individual tokens, the 'fortifyclient' tool can be used.)
     */
     clearTokensOfUser() {
         const restClient = this;
         return new Promise((resolve, reject) => {
             const auth = 'Basic ' + new Buffer(config.user + ':' + config.password).toString('base64');
 
-            if (!restClient.api) { // api was never initialized (eg. problem connecting to server) 
+            if (!restClient.api) { // api was never initialized (eg. problem connecting to server)
                 return reject(new Error("restClient not initialized! make sure to call initialize before using API"));
             }
             restClient.api["auth-token-controller"].multiDeleteAuthToken({ all: true }, {
@@ -629,7 +629,7 @@ export default class restClient {
     }
     /**
      * downloads a single FPR from a version based on ID
-     * @param {*} artifactId (version id to upload to)     
+     * @param {*} artifactId (version id to upload to)
      * returns - resolves and returns the JOB_ARTIFACTUPLOAD id for the uploaded FPR.
      */
     downloadFPR(artifactId, filename) {
@@ -717,9 +717,9 @@ export default class restClient {
     /*
     *  Retrieve list of auth entities assigned to a given application version.
     * [
-    *    {id:.., isLdap:true/false, type:..., entityName:..., displayName, firstName:..., lastName:..., email:...}, 
+    *    {id:.., isLdap:true/false, type:..., entityName:..., displayName, firstName:..., lastName:..., email:...},
     *    ...
-    * ] 
+    * ]
     */
     getAuthEntitiesOfAppVersion(pvId) {
         const restClient = this;
@@ -737,7 +737,7 @@ export default class restClient {
     }
 
     /*
-    *  Assigns one or more authentities (users or ldapentities) to a given application version 
+    *  Assigns one or more authentities (users or ldapentities) to a given application version
     */
     assignAppVersionToAuthEntities(pvId, arrayOfAuthEntities) {
         const restClient = this;
@@ -758,8 +758,8 @@ export default class restClient {
     }
 
     /**
-     *  Get a list of issues 
-     * @param {*} versionId 
+     *  Get a list of issues
+     * @param {*} versionId
      * @param {*} start = where to start if paginating
      * @param {*} filterby - optional filterby statement.
      * @param {*} limit - offset for pagination or limit issues
@@ -779,8 +779,8 @@ export default class restClient {
     /**
      * gets all issues of a version in batches of 'limit' and call batch call back for each param
      * when all done promise will resolve with total count.
-     * @param {*} versionId 
-     * @param {*} limit 
+     * @param {*} versionId
+     * @param {*} limit
      * @param {*} batchCB
      */
     getAllIssueOfVersion(versionId, limit, batchCB) {
@@ -799,5 +799,38 @@ export default class restClient {
         }
         return getIssues(0);
     }
-}
 
+    /**
+     * gets all custom tags for a project version
+     * @param {*} versionId
+     */
+    getAllCustomTagsOfVersion(versionId) {
+        const controller = this.api["custom-tag-of-project-version-controller"];
+        return controller.listCustomTagOfProjectVersion({ 'parentId': versionId }, getClientAuthTokenObj(this.token)).then((response) => {
+            return response.obj.data;
+        });
+    }
+
+    /**
+     * gets a custom tag from an ID
+     * @param {*} customTagId
+     */
+    getCustomTag(customTagId) {
+        const controller = this.api["custom-tag-controller"];
+        return controller.readCustomTag({ 'id': customTagId }, getClientAuthTokenObj(this.token)).then((response) => {
+            return response;
+        });
+    }
+
+    /**
+     * update custom tags list of a project version
+     * @param {*} versionId
+     * @param {*} customTagList
+     */
+    updateCustomTagsOfVersion(versionId, customTagList) {
+      const controller = this.api["custom-tag-of-project-version-controller"];
+      return controller.updateCollectionCustomTagOfProjectVersion({ 'parentId': versionId, 'data': customTagList}, getClientAuthTokenObj(this.token)).then((response) => {
+          return response;
+      });
+    }
+}
