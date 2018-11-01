@@ -18,7 +18,8 @@
     "predict": "mocha test/auditAssistantBatchPredict_spec.js",
     "train": "mocha test/auditAssistantBatchTraining_spec.js",
     "uploadFPR": "mocha test/fprUpload_spec.js",
-    "runCleanup": "mocha test/cleanup/runCleanup_spec.js"
+    "runCleanup": "mocha test/cleanup/runCleanup_spec.js",
+    "updateCustomTagsOfVersion": "mocha test/updateCustomTagsOfVersion_spec.js"
   },
   "repository": {
     "type": "git",
