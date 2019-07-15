@@ -96,7 +96,7 @@ export default class restClient {
                 url: `${config.sscAPIBase}/spec.json`,
                 usePromise: true,
             }).then((api) => {
-                console.log("successfully loaded swagger spec. Attempting to call heartbeat /features ");
+                console.log("Successfully loaded swagger spec. Attempting to call heartbeat /features ");
                 that.api = api;
                 async.waterfall([
                     function getToken(callback) {
@@ -105,7 +105,6 @@ export default class restClient {
                          * or preferably, use a long-lived token such as "AnalysisUploadToken"/"JenkinsToken" (lifetime is several months)
                          * and retrieve it from persistent storage. DO NOT create new long-lived tokens for every run!!  */
 
-                        //console.log("Creating new login token");
                         restClient.generateToken("UnifiedLoginToken")
                             .then((token) => {
                                 callback(null, token);
@@ -520,7 +519,7 @@ export default class restClient {
     generateToken(type) {
         const restClient = this;
         return new Promise((resolve, reject) => {
-            const auth = 'Basic ' + new Buffer(config.user + ':' + config.password).toString('base64');
+            const auth = 'Basic ' + Buffer.from(config.user + ':' + config.password).toString('base64');
 
             restClient.api["auth-token-controller"].createAuthToken({ authToken: { "terminalDate": getExpirationDateString(), "type": type } }, {
                 responseContentType: 'application/json',
@@ -545,7 +544,7 @@ export default class restClient {
     clearTokensOfUser() {
         const restClient = this;
         return new Promise((resolve, reject) => {
-            const auth = 'Basic ' + new Buffer(config.user + ':' + config.password).toString('base64');
+            const auth = 'Basic ' + Buffer.from(config.user + ':' + config.password).toString('base64');
 
             if (!restClient.api) { // api was never initialized (eg. problem connecting to server)
                 return reject(new Error("restClient not initialized! make sure to call initialize before using API"));
