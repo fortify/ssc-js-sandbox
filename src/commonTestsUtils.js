@@ -50,7 +50,7 @@ class CommonTestUtils {
             done();
         }).catch((err) => {
             console.log("initialization failed", err)
-            done( new Error("authentication failed, check your user and password: " + JSON.stringify(err)));
+            done(new Error("authentication failed, check your user and password: " + JSON.stringify(err)));
         });
     }
     
@@ -64,9 +64,9 @@ class CommonTestUtils {
             myRestClient = restClient;
         }
         myRestClient.clearTokensOfUser().then(() => {
-            done()
+            done();
         }).catch((err) => { 
-            done(err) 
+            done(new Error("doCleanup:" + JSON.stringify(err)));
         });
     }
 
