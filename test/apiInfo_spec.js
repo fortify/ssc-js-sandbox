@@ -32,9 +32,9 @@ describe('api info', function () {
      * initialize and authenticate
      */
     restClient.initialize().then(() => {
-      done()
+      done();
     }).catch((err) => { 
-      done(err) 
+      done(new Error("1. restClient.initialize() failed: " + JSON.stringify(err)));
     });
   });
 
