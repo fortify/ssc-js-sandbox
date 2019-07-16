@@ -56,7 +56,7 @@ describe('create a new local user and assign to a project version', function () 
         "firstName": "new",
         "lastName": "user" +timeStamp,
         "email": "newuser" + +timeStamp + "@test.com",
-        "clearPassword": "Admin_12",
+        "clearPassword": "Admin_12%superStrong!$",
         "passwordNeverExpire": true,
         "roles": [{
             "id": "securitylead"

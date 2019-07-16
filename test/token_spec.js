@@ -32,8 +32,10 @@ describe('generate tokens by type', function () {
      * initialize and authenticate
      */
     restClient.initialize().then(() => {
-      done()
-    }).catch((err) => { done(err) });
+      done();
+    }).catch((err) => {
+      done(new Error("2. restClient.initialize() failed: " + JSON.stringify(err)));
+    });
   });
 
   after(function (done) {
@@ -58,8 +60,7 @@ describe('generate tokens by type', function () {
       console.log(chalk.green("successfully generated " + type + " token " + token));
       done();
     }).catch((err) => {
-      console.log(chalk.red("error creating token"), err)
-      done(err);
+      done(new Error("restClient.generateToken() failed: " + JSON.stringify(err)));
     });
   });
 });
