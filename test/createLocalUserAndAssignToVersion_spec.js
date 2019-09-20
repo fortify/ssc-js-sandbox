@@ -81,7 +81,7 @@ describe('create a new local user and assign to a project version', function () 
    * Assign user to version
    */
   it('assign user to version', function (done) {
-    const requestData = {"type":"assign","ids":[config.sampleVersionId]};
+    const requestData = {"projectVersionIds": [config.sampleVersionId]};
     if(!localUserEntity) {
       return done(new Error("No local user created."));
     }

@@ -1,4 +1,4 @@
---require babel-core/register
+--require @babel/register
 -u bdd
 --timeout 999999
 --colors

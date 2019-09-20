@@ -100,7 +100,7 @@
             "sourceMaps": true,
             "args": [
                 "--require",
-                "babel-core/register",
+                "@babel/register",
                 "-u",
                 "bdd",
                 "--timeout",
@@ -167,7 +167,7 @@
             "sourceMaps": true,
             "args": [
                 "--require",
-                "babel-core/register",
+                "@babel/register",
                 "-u",
                 "bdd",
                 "--timeout",
@@ -189,7 +189,7 @@
             "sourceMaps": true,
             "args": [
                 "--require",
-                "babel-core/register",
+                "@babel/register",
                 "-u",
                 "bdd",
                 "--timeout",
@@ -212,7 +212,7 @@
             "sourceMaps": true,
             "args": [
                 "--require",
-                "babel-core/register",
+                "@babel/register",
                 "-u",
                 "bdd",
                 "--timeout",
