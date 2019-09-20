@@ -50,7 +50,7 @@ describe('assign a user to one or more project versions', function () {
    */
   it('assign user to one or more project versions', function (done) {
     const userId = config.sampleUserId;
-    const requestData = {"type":"assign","ids":[config.sampleVersionId, config.sampleSecondaryVersionId]};
+    const requestData = {"projectVersionIds": [config.sampleVersionId, config.sampleSecondaryVersionId]};
     restClient.assignUserToVersions(userId,requestData).then((resp) => {
       console.log(chalk.green(`successfully assigned userid ${userId} to versions [${config.sampleVersionId} , ${config.sampleSecondaryVersionId}]`));
       done();
