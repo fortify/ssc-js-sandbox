@@ -107,6 +107,7 @@ export default class restClient {
 
                         restClient.generateToken("UnifiedLoginToken")
                             .then((token) => {
+                                console.log("Generated token: " + token);
                                 callback(null, token);
                             }).catch((error) => {
                                 callback(error);
