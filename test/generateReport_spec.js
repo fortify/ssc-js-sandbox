@@ -50,8 +50,8 @@ describe('generate a report and tracks status to completion', function () {
    * generate report
    */
   it('generates a report ', function (done) {
-
-    restClient.generateDISASTIGReport("MY_DISA_STIG", "My excellent notes", "DISA STIG", "PDF", config.sampleAppId, config.sampleVersionId).then((savedReport) => {
+    const reportName = "Fortify JS Sandbox DISA STIG " + Math.floor(Date.now() / 1000);
+    restClient.generateDISASTIGReport(reportName, "My excellent notes", "DISA STIG", "PDF", config.sampleAppId, config.sampleVersionId).then((savedReport) => {
       console.log(chalk.green("successfully generated DISA STIG " + JSON.stringify(savedReport)));
       savedReportEntity = savedReport;
       done();
@@ -96,8 +96,8 @@ describe('generate a report and tracks status to completion', function () {
             break;
         }
       }).catch((err) => {
-        let msg = `${savedReport.name} id(${savedReport.id}) failed! ` + err.message;
-        console.log(chalk.red(msg));
+        // let msg = `${savedReport.name} id(${savedReport.id}) failed! ` + err.message;
+        console.log("Error generating report: " + JSON.stringify(err));
         done(err);
       });
     }
