@@ -13,7 +13,7 @@
 const config = {
     versionIdCSV: "aa-version-sample.csv", //filename with comma seperated application version ids
     batchSize: 2, //rest call parrallel batch size - how many version to call in parallel in one batch (batches executed sequentually)
-    sampleFPR: '/fpr/Log1.3_splc.fpr',
+    sampleFPR: '/fpr/Log1.3_splc-20.1.0.fpr',
     sampleAppId: 1,
     sampleVersionId: 2,//sample app version id
     sampleCustomTagId: 11,//sample custom tag id
@@ -22,8 +22,11 @@ const config = {
     downloadFolder: "/downloads", //relative to root project, wil be created if non existant
     sampleUserId: 4,
     sampleAuthEntities: [{"id": 12, "isLdap": false}, {"id": 9, "isLdap": false}, {"id": 6, "isLdap": false}],
-    sampleAttributeDefinition: { "name": undefined, "category": "TECHNICAL", "appEntityType": "ALL", "type": "TEXT" },
-    sampleAttributeValue: [{"attributeDefinitionId":undefined,"values":null,"value":undefined}]
+    sampleAttributeDefinition: {"name": "", "description": "Created by SSC-js-sandbox", "category": "ORGANIZATION", "type": "TEXT", "appEntityType": "PROJECT_VERSION"},
+    sampleCustomTag: {"name": "", "description": "Created by SSC-js-sandbox", "valueType": "TEXT", "customTagType": "CUSTOM"},
+    sampleAttributeValue: [{"attributeDefinitionId":undefined,"values":null,"value":undefined}],
+    auditAssistantConfigGroup: 'auditassistant',
+    auditAssistantEnabledKey: 'auditassistant.enabled'
 }
 module.exports = {
     /**
@@ -40,6 +43,7 @@ module.exports = {
         config.sscReportDownloadURL = process.env.SSC_URL+"/transfer/reportDownload.html";
         config.user = process.env.SSC_USERNAME; //ssc username
         config.password =  process.env.SSC_PASSWORD; //ssc password
+        config.skipAA = process.env.SKIP_AA_TESTS; // bypass Audit Assistant tests if not enabled
         return config;
     }
 }

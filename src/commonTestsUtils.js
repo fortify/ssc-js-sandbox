@@ -165,11 +165,6 @@ class CommonTestUtils {
                     summary.forEach((batch, i) => {
                         console.table(chalk.green("Batch " + i + " succeeded"), batch.ok);
                     })
-
-                    summary.forEach((batch, i) => {
-                        console.table(chalk.red("Batch " + i + " failed"), batch.error);
-                    })
-
                     done();
                 })
 

@@ -15,11 +15,13 @@
     "generateReport": "mocha test/generateReport_spec.js",
     "downloadFPR": "mocha test/fprDownload_spec.js",
     "getVersionIssues": "mocha test/issues_spec.js",
+    "getAuditAssistantConfiguration": "mocha test/getAAConfig_spec.js",
     "predict": "mocha test/auditAssistantBatchPredict_spec.js",
     "train": "mocha test/auditAssistantBatchTraining_spec.js",
     "uploadFPR": "mocha test/fprUpload_spec.js",
     "runCleanup": "mocha test/cleanup/runCleanup_spec.js",
-    "updateCustomTagsOfVersion": "mocha test/updateCustomTagsOfVersion_spec.js"
+    "updateCustomTagsOfVersion": "mocha test/updateCustomTagsOfVersion_spec.js",
+    "createCustomTag": "mocha test/createCustomTag_spec.js"
   },
   "repository": {
     "type": "git",

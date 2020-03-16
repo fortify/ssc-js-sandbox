@@ -66,7 +66,6 @@ describe('Creates a new Attribute of type text and assigns a value this attribut
       done(new Error("attributeDefinition was not created in previous step"));
       return;
     }
-    
     config.sampleAttributeValue[0].attributeDefinitionId = attributeDefinition.id;
     config.sampleAttributeValue[0].value = "#sandbox_sample_guid";
     commonTestsUtils.batchAPIActions(done, "assignAttribute", config.sampleAttributeValue);
