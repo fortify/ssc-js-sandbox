@@ -164,20 +164,46 @@ export default class restClient {
         })
         return result;
     }
+
     /**
-     * send for Audit Assistant prediction or training or future actions when implemented
-     * @param {*} versionId
-     * @param {*} actionType
+     * Gets configuration for the specified group
+     * @param {*} groupName
      */
-    sendToAA(versionId, actionType) {
+    getConfiguration(groupName) {
         const restClient = this;
         return new Promise((resolve, reject) => {
             if (!restClient.api) {
                 return reject("restClient not initialized! make sure to call initialize before using API");
             }
-            restClient.api["project-version-controller"].doActionProjectVersion({
-                "id": versionId, resourceAction: { "type": actionType }
-            }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+
+            restClient.api["configuration-controller"].getConfiguration({group: groupName},
+                getClientAuthTokenObj(restClient.token))
+            .then((resp) => {
+                if (resp.obj.responseCode !== 200) {
+                    reject(new Error(resp.obj.data.message));
+                } else {
+                    resolve(resp.obj.data);
+                }
+            }).catch((error) => {
+                reject(error);
+            });;
+        });
+    }
+
+    /**
+     * send for Audit Assistant training
+     * @param {*} versionId
+     */
+    sendForTraining(versionId) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["project-version-controller"].trainAuditAssistantProjectVersion(
+                {resource: {"projectVersionIds": [versionId]}},
+                getClientAuthTokenObj(restClient.token))
+            .then((resp) => {
                 if (resp.obj.data.message.indexOf("failed") !== -1) {
                     //legacy
                     reject(new Error(resp.obj.data.message));
@@ -189,11 +215,27 @@ export default class restClient {
             });;
         });
     }
-    sendForTraining(versionId) {
-        return this.sendToAA(versionId, "SEND_FOR_TRAINING");
-    }
+
     sendForPrediction(versionId) {
-        return this.sendToAA(versionId, "SEND_TO_AUDITASSISTANT");
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["project-version-controller"].auditByAuditAssistantProjectVersion(
+                {resource: {"projectVersionIds": [versionId]}},
+                getClientAuthTokenObj(restClient.token))
+            .then((resp) => {
+                if (resp.obj.data.message.indexOf("failed") !== -1) {
+                    //legacy
+                    reject(new Error(resp.obj.data.message));
+                } else {
+                    resolve(resp);
+                }
+            }).catch((error) => {
+                reject(error);
+            });;
+        });
     }
     /**
      * create a version. At the minimum this requires 3 steps
@@ -313,8 +355,29 @@ export default class restClient {
             restClient.api["attribute-definition-controller"].createAttributeDefinition({
                 resource: definition
             }, getClientAuthTokenObj(restClient.token)).then((resp) => {
-                console.log("attribute " + resp.id + " created successfully!");
+                console.log("attribute " + resp.obj.data.id + " created successfully!");
                 resolve(resp.obj.data); //return attribute definition object
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+    /**
+     * creates new custom tag
+     * @param {*} customTag - json payload (see config.js)
+     */
+    createCustomTag(customTag) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["custom-tag-controller"].createCustomTag({
+                data: customTag
+            }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                console.log("custom tag " + resp.id + " created successfully!");
+                resolve(resp.obj.data);
             }).catch((err) => {
                 reject(err);
             });
@@ -704,9 +767,9 @@ export default class restClient {
             if (!restClient.api) {
                 return reject("restClient not initialized! make sure to call initialize before using API");
             }
-            restClient.api["project-version-of-auth-entity-controller"].doActionProjectVersionOfAuthEntity({
+            restClient.api["project-version-of-auth-entity-controller"].assignProjectVersionOfAuthEntity({
                 parentId: userId,
-                collectionAction: requestData
+                resource: requestData
             }, getClientAuthTokenObj(restClient.token)).then((resp) => {
                 resolve(resp.obj.data);
             }).catch((error) => {

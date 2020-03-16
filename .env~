@@ -1,0 +1,6 @@
+// no trailing slash e.g., http://localhost:8080/ssc
+SSC_URL=http://127.0.0.1:8080/ssc
+#SSC_URL=http://16.40.6.107:8080/ssc
+#SSC_URL=http://qa-dp-w-orcl.prgqa.hpecorp.net/ssc/html/ssc/dashboard/Issue%20Stats
+SSC_USERNAME=admin
+SSC_PASSWORD=Admin_12strong
