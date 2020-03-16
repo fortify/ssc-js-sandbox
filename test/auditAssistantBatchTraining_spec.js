@@ -10,11 +10,12 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 */
-const assert = require('assert');
-const expect = require('chai').expect;
+import configLoader from '../config';
 const CommonTestUtils =  require('../src/commonTestsUtils');
-
 const commonTestsUtils = new CommonTestUtils();
+const dotenv = require('dotenv').config();//must be before config
+const config = configLoader.loadEnv();
+const chalk = require('chalk');
 
 describe('batch predicts audit assistant', function () {
 
@@ -26,18 +27,31 @@ describe('batch predicts audit assistant', function () {
   });
 
   after(function (done) {
-     /* Perform any cleanups. currently clears all tokens of test user.
-     * Do not call this method below if you plan on re-using a long-lived token for your authentication.
-     */
-    commonTestsUtils.doCleanup(done);
+    if (config.skipAA) {
+      done();
+    } else {
+      /* Perform any cleanups. currently clears all tokens of test user.
+      * Do not call this method below if you plan on re-using a long-lived token for your authentication.
+      */
+      commonTestsUtils.doCleanup(done);
+    }
   });
 
   it('validates all properties exist', function (done) {
-    commonTestsUtils.validateConfigurationAndAuth(done);
+    if (config.skipAA) {
+      console.log(chalk.red('Audit Assistant is not enabled. Skipping test'));
+      done();
+    } else {
+      commonTestsUtils.validateConfigurationAndAuth(done);
+    }
   });
 
   it('batch trains on given list of versions ', function (done) {
-    commonTestsUtils.batchAPIActions(done, "sendForTraining");
-
+    if (config.skipAA) {
+      console.log(chalk.red('Audit Assistant is not enabled. Skipping test'));
+      done();
+    } else {
+      commonTestsUtils.batchAPIActions(done, "sendForTraining");
+    }
   });
 });
