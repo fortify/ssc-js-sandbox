@@ -11,6 +11,7 @@
     "assignAppVersionToAuthEntities": "mocha test/assignAppVersionToAuthEntities_spec.js",
     "createLocalUserAndAssignToVersion": "mocha test/createLocalUserAndAssignToVersion_spec.js",
     "createVersion": "mocha test/createVersion_spec.js",
+    "createCustomTag": "mocha test/createCustomTag_spec.js",
     "generateToken": "mocha test/token_spec.js",
     "generateReport": "mocha test/generateReport_spec.js",
     "downloadFPR": "mocha test/fprDownload_spec.js",
@@ -20,8 +21,7 @@
     "train": "mocha test/auditAssistantBatchTraining_spec.js",
     "uploadFPR": "mocha test/fprUpload_spec.js",
     "runCleanup": "mocha test/cleanup/runCleanup_spec.js",
-    "updateCustomTagsOfVersion": "mocha test/updateCustomTagsOfVersion_spec.js",
-    "createCustomTag": "mocha test/createCustomTag_spec.js"
+    "updateCustomTagsOfVersion": "mocha test/updateCustomTagsOfVersion_spec.js"
   },
   "repository": {
     "type": "git",
