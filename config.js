@@ -15,8 +15,8 @@ const config = {
     batchSize: 2, //rest call parrallel batch size - how many version to call in parallel in one batch (batches executed sequentually)
     sampleFPR: '/fpr/Log1.3_splc-20.1.0.fpr',
     sampleAppId: 1,
-    sampleVersionId: 2,//sample app version id
-    sampleCustomTagId: 11,//sample custom tag id
+    sampleVersionId: 1,//sample app version id
+    sampleCustomTagId: -1,//sample custom tag id, or -1 to get custom tag with highest id
     sampleSecondaryVersionId: 4,
     sampleArtifactId: 10, // sample fpr id
     downloadFolder: "/downloads", //relative to root project, wil be created if non existant

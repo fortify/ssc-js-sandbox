@@ -61,15 +61,26 @@ describe('add an existing custom tag to project version', function () {
     });
   });
 
-  it('get the specific custom tag that we want to add and append to final list', function (done) {
-    restClient.getCustomTag([config.sampleCustomTagId]).then((response) => {
-      customTags.push(response.obj.data);
-      console.log(chalk.green(`IDs of custom tag list with new appended element: ` + customTags.map(elem => elem.id).join(", ")));
-      done();
-    }).catch((err) => {
-      console.log(chalk.red("error appending the selected custom tag to the list"), err)
-      done(err);
-    });
+  it('get the specific custom tag that we want to add and append to final list or create a new custom tag', function (done) {
+    let customTagId = config.sampleCustomTagId;
+    if (config.sampleCustomTagId < 0) {
+      const customTag = config.sampleCustomTag;
+      customTag.name = 'Custom tag for version id ' + config.sampleVersionId + ' ' + Math.floor(Math.random() * 1000);
+      restClient.createCustomTag(customTag).then((newCustomTag) => {
+        console.log(chalk.green("successfully created custom tag " + newCustomTag.name + " with id " + newCustomTag.id));
+        restClient.getCustomTag([newCustomTag.id]).then((response) => {
+          customTags.push(response.obj.data);
+          console.log(chalk.green(`IDs of custom tag list with new appended element: ` + customTags.map(elem => elem.id).join(", ")));
+          done();
+        }).catch((err) => {
+          console.log(chalk.red("error appending the selected custom tag to the list"), err)
+          done(err);
+        });
+      }).catch((err) => {
+        console.log(chalk.red("error creating version "), err)
+        done(err);
+      });
+    }
   });
 
   it('update the list of custom tags', function (done) {
