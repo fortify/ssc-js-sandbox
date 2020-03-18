@@ -49,8 +49,8 @@ describe('creates a Custom Tag ', function () {
   it('creates a custom tag', function (done) {
     const customTag = config.sampleCustomTag;
     customTag.name = 'JS-Sandbox ' + Math.floor(Math.random() * 1000);
-    restClient.createCustomTag(customTag).then((result) => {
-      console.log(chalk.green("successfully created custom tag " + customTag.name + " with id " + customTag.id));
+    restClient.createCustomTag(customTag).then((newCustomTag) => {
+      console.log(chalk.green("successfully created custom tag " + newCustomTag.name + " with id " + newCustomTag.id));
       done();
     }).catch((err) => {
       console.log(chalk.red("error creating version "), err)
