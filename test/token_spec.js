@@ -49,10 +49,10 @@ describe('generate tokens by type', function () {
    * create a version
    */
   it('generates a token ', function (done) {
-    //generate a CloudOneTimeJobToken by default or look in env for override
-    let type = 'CloudOneTimeJobToken';
-    //AnalysisDownloadToken, AnalysisUploadToken, AuditToken, UploadFileTransferToken, DownloadFileTransferToken, ReportFileTransferToken, CloudCtrlToken,
-    //CloudOneTimeJobToken, WIESystemToken, WIEUserToken, UnifiedLoginToken, ReportToken, PurgeProjectVersionToken
+    //generate a CIToken by default or look in env for override
+    let type = 'CIToken';
+    //AnalysisDownloadToken, AnalysisUploadToken, AuditToken, UploadFileTransferToken, DownloadFileTransferToken, ReportFileTransferToken,
+    //CloudCtrlToken , WIESystemToken, WIEUserToken, UnifiedLoginToken, ReportToken, PurgeProjectVersionToken
     if (process.env.FORTIFY_TOKEN_TYPE) {
       type = process.env.FORTIFY_TOKEN_TYPE;
     }
