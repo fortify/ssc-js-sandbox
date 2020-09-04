@@ -35,7 +35,8 @@ function getClientAuthTokenObj(token) {
         requestContentType: 'application/json',
         responseContentType: 'application/json',
         clientAuthorizations: {
-            "FortifyToken": new Swagger.ApiKeyAuthorization('Authorization', 'FortifyToken ' + token, 'header'),
+            'Authorization': 'FortifyToken ' + token,
+            'FortifyToken':  'FortifyToken ' + token
         }
     }
 }
@@ -97,9 +98,23 @@ export default class restClient {
                 usePromise: true,
             }).then((api) => {
                 console.log("Successfully loaded swagger spec. Attempting to call heartbeat /features ");
-                that.api = api;
+                that.api = api.apis;
                 async.waterfall([
-                    function getToken(callback) {
+                    function getSwaggerClient(callback) {
+                        const endpoint = `${config.sscAPIBase}/spec.json`;
+                        /**
+                         * Set up the Swagger endpoint and make .basicApi property available to use when calling API with basic auth
+                         */
+                        Swagger(endpoint, 
+                            {authorizations: {
+                                Basic: { username: config.user, password: config.password },
+                              }})
+                            .then( client => {
+                                restClient.basicApi = client.apis;
+                                callback(null, client);
+                            });
+                    },
+                    function getToken(client, callback) {
                         /* do not create token again if we already have one.
                          * In general, for automations either use a short-lived (<1day) token such as "UnifiedLoginToken"
                          * or preferably, use a long-lived token such as "AnalysisUploadToken"/"JenkinsToken" (lifetime is several months)
@@ -107,14 +122,28 @@ export default class restClient {
 
                         restClient.generateToken("UnifiedLoginToken")
                             .then((token) => {
-                                console.log("Generated token: " + token);
                                 callback(null, token);
                             }).catch((error) => {
                                 callback(error);
                             });
                     },
+                    function getSwaggerClientWithTokenAuth(token, callback) {
+                        /**
+                         * Set up the Swagger endpoint and make .api property available to use when calling API with token auth
+                         */
+                        const endpoint = `${config.sscAPIBase}/spec.json`;
+                        Swagger(endpoint, 
+                            {authorizations: {
+                                'FortifyToken':  'FortifyToken ' + token
+                              }})
+                            .then( client => {
+                                restClient.api = client.apis;
+                                callback(null, client);
+                            });
+                    },
+
                     function heartbeat(token, callback) {
-                        api["feature-controller"].listFeature({}, getClientAuthTokenObj(token)).then((features) => {
+                        restClient.api["feature-controller"].listFeature({}, getClientAuthTokenObj(token)).then((features) => {
                             callback(null, token);
                         }).catch((error) => {
                             callback(error);
@@ -583,14 +612,8 @@ export default class restClient {
     generateToken(type) {
         const restClient = this;
         return new Promise((resolve, reject) => {
-            const auth = 'Basic ' + Buffer.from(config.user + ':' + config.password).toString('base64');
-
-            restClient.api["auth-token-controller"].createAuthToken({ authToken: { "terminalDate": getExpirationDateString(), "type": type } }, {
-                responseContentType: 'application/json',
-                clientAuthorizations: {
-                    "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
-                }
-            }).then((data) => {
+            restClient.basicApi["auth-token-controller"].createAuthToken({ authToken: { "terminalDate": getExpirationDateString(), "type": type } })
+            .then((data) => {
                 //got it so pass along
                 resolve(data.obj.data.token)
             }).catch((error) => {
@@ -613,12 +636,8 @@ export default class restClient {
             if (!restClient.api) { // api was never initialized (eg. problem connecting to server)
                 return reject(new Error("restClient not initialized! make sure to call initialize before using API"));
             }
-            restClient.api["auth-token-controller"].multiDeleteAuthToken({ all: true }, {
-                responseContentType: 'application/json',
-                clientAuthorizations: {
-                    "Basic": new Swagger.PasswordAuthorization(config.user, config.password)
-                }
-            }).then((data) => {
+            restClient.basicApi["auth-token-controller"].multiDeleteAuthToken({ all: true })
+            .then((data) => {
                 //got it so pass along
                 resolve(data.obj.data); // will be 'true' but we don't really care about return value.
             }).catch((error) => {
