@@ -1,0 +1,4 @@
+require: '@babel/register'
+timeout: 999999
+ui: 'bdd'
+color: true
