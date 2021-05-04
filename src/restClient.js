@@ -169,6 +169,9 @@ export default class restClient {
      */
     getControllers() {
         const restClient = this;
+        if (!restClient.api) {
+            console.log("restClient not initialized! make sure to call initialize before using API");
+        }
         //get list of controllers
         const controllersNames = Object.keys(restClient.api).filter((item) => {
             if (restClient.api[item] === null) {
@@ -292,7 +295,7 @@ export default class restClient {
      *                          { attributeDefinitionId: 1, values: [{ guid: "High" }], value: null }
      *                      ]}
      */
-    createVersion(options) {
+     createVersion(options) {
         const restClient = this;
         return new Promise((resolve, reject) => {
             //collect all function for waterfall dispatching.
@@ -370,6 +373,104 @@ export default class restClient {
         });
     }
 
+    /**
+     * copy an existing version. At the minimum this requires 4 steps
+     * 1. create version and app (project) resource
+     * 2. copy attributes from existing version (required ones at least)
+     * 3. copy current state (i.e. issues) from existing version
+     * 3. commit version to make it usable
+     * Note: a bulk request can be used to send one request to the server that contains more than one.
+     * This sample will use an async waterfall call to do them one after the other.
+     * @param {*} options { name,
+     *                      description,
+     *                      // the id of the application that the new release is being created under
+     *                      appId,
+     *                      appName,
+     *                      appDesc,
+     *                      issueTemplateId,
+     *                      // the id of the existing version to copy attributes from
+     *                      copyVersionId
+     *                     }
+     */
+     copyVersion(options) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            //collect all function for waterfall dispatching.
+            const waterfallFunctionArray = [
+                function createAppAndVersionResource(callback) {
+                    restClient.api["project-version-controller"].createProjectVersion({
+                        resource: {
+                            "name": options.name,
+                            "description": options.description,
+                            "active": true,
+                            "committed": false,
+                            "project": {
+                                "id": options.appId,
+                                "name": options.appName,
+                                "description": options.appDesc,
+                                "issueTemplateId": options.issueTemplateId
+                            },
+                            "issueTemplateId": options.issueTemplateId
+                        }
+                        
+                    }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                        callback(null, resp.obj.data);
+                    }).catch((err) => {
+                        callback(err);
+                    });
+                },
+                function assignAttributes(version, callback) {
+                    restClient.api["attribute-of-project-version-controller"].listAttributeOfProjectVersion({
+                        parentId: options.copyVersionId
+                    }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                        restClient.api["attribute-of-project-version-controller"].updateCollectionAttributeOfProjectVersion({
+                            parentId: version.id,
+                            data: resp.obj.data
+                        }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                            callback(null, version, resp.obj.data);
+                        }).catch((err) => {
+                            callback(err);
+                        });
+                    });    
+                },
+                function commit(version, attrs, callback) {
+                    restClient.api["project-version-controller"].updateProjectVersion({
+                        id: version.id,
+                        resource: { "committed": true }
+                    }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                        callback(null, resp.obj.data);
+                    }).catch((err) => {
+                        console.log(err);
+                        callback(err);
+                    });
+                }
+            ];
+            // add a function to copy state this will activate a background process on the server to copy over issues.
+            waterfallFunctionArray.push(function (version, callback) {
+                restClient.api["project-version-controller"].copyCurrentStateForProjectVersion({
+                    resource: { projectVersionId: version.id, previousProjectVersionId: options.copyVersionId }
+                }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                    if (resp.obj.message) {
+                        if (resp.obj.message.indexOf("failed") !== -1) {
+                            callback(new Error(resp.obj))
+                        }    
+                    } else {
+                        callback(null, version);
+                    }
+                }).catch((error) => {
+                    callback(error);
+                });;
+            });
+            //Fire the functions one by one
+            async.waterfall(waterfallFunctionArray, function allDone(err, version) {
+                if (err) {
+                    return reject(err);
+                }
+                console.log("version " + options.name + " created successfully!");
+                resolve(version);
+            });
+        });
+    }
 
     /**
      * create attribute definition
@@ -914,5 +1015,72 @@ export default class restClient {
       return controller.updateCollectionCustomTagOfProjectVersion({ 'parentId': versionId, 'data': customTagList}, getClientAuthTokenObj(this.token)).then((response) => {
           return response;
       });
+    }
+
+    /**
+     * check whether the specified project name is already defined in the system
+     * @param {*} projectName
+     */
+    testProject(projectName) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["project-controller"].testProject({
+                resource: {
+                    applicationName: projectName
+                }    
+            }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                resolve(resp.obj.data);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+    /**
+     * check whether the specified project version is already defined in the system
+     * @param {*} projectName
+     * @param {*} projectVersionName
+     */
+     testProjectVersion(projectName, projectVersionName) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["project-version-controller"].testProjectVersion({
+                projectVersionTestRequest: {
+                    projectName: projectName,
+                    projectVersionName: projectVersionName
+                }    
+            }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                resolve(resp.obj.data);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+    /**
+     * gets a project by name
+     * @param {*} projectName
+     */
+    getProject(projectName) {
+        const restClient = this;
+        return new Promise((resolve, reject) => {
+            if (!restClient.api) {
+                return reject("restClient not initialized! make sure to call initialize before using API");
+            }
+            restClient.api["project-controller"].listProject({ 
+                q: projectName,
+                fulltextsearch: true
+            }, getClientAuthTokenObj(restClient.token)).then((resp) => {
+                resolve(resp.obj.data);
+            }).catch((error) => {
+                reject(error);
+            });;
+        });
     }
 }

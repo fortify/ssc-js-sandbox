@@ -4,6 +4,7 @@
   "description": "A sandbox project including samples and workflows with the Fortify Software Security Center (SSC) REST API",
   "main": "index.js",
   "scripts": {
+    "main": "node -r esm src/main.js",
     "all": "mocha test/*.js test/cleanup/runCleanup_spec.js",
     "apiInfo": "mocha test/apiInfo_spec.js",
     "assignUserToVersions": "mocha test/assignUserToVersions_spec.js",
@@ -11,6 +12,7 @@
     "assignAppVersionToAuthEntities": "mocha test/assignAppVersionToAuthEntities_spec.js",
     "createLocalUserAndAssignToVersion": "mocha test/createLocalUserAndAssignToVersion_spec.js",
     "createVersion": "mocha test/createVersion_spec.js",
+    "copyVersion": "mocha test/copyVersion_spec.js",
     "createCustomTag": "mocha test/createCustomTag_spec.js",
     "generateToken": "mocha test/token_spec.js",
     "generateReport": "mocha test/generateReport_spec.js",
@@ -48,6 +50,7 @@
     "cross-env": "^7.0.2",
     "csv": "^5.3.2",
     "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
     "http-status": "^1.0.1",
     "mocha": "~8.2.1",
     "request": "^2.81.0",
