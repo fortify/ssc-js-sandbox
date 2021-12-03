@@ -55,7 +55,7 @@ module.exports = {
     
     const startIdArgument =  process.argv.find((arg) => arg.includes("--start-id="));
     if (startIdArgument) {
-      const parsedStartId = parseInt(startIdArg.split("=")[1]);
+      const parsedStartId = parseInt(startIdArgument.split("=")[1]);
       if (!isNaN(parsedStartId)) {
         startId = parsedStartId;
       }
