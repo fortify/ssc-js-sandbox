@@ -52,7 +52,7 @@
     "mocha": "~8.2.1",
     "request": "^2.81.0",
     "sequence": "^3.0.0",
-    "swagger-client": "^3.10.0"
+    "swagger-client": "^3.18.5"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
